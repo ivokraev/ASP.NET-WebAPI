@@ -1,9 +1,20 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 
+const string localhostOrigin = "localhost";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: localhostOrigin,
+        policy  =>
+        {
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200");
+        });
+});
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
